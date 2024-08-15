@@ -17,7 +17,9 @@ With all that said, I will note , that this is my first project focusing around 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-The second part of the project deploys the model in an RShiny app, so people can have a convenient way to actually use the model, instead of having to download R and have the raw script to run it. I do not use an R notebook file for this, and instead use a raw R script file, since this is needed to actually run the app. However, I have some comments scattered around the file to detail and explain the code logic. The script for the app is in the `app.R` file, again, with all the required libraries/dependencies at the start.
+The second part of the project deploys the model in an RShiny app, so people can have a convenient way to actually use the model, instead of having to download R and have the raw script to run it. I do not use an R notebook file for this, and instead use a raw R script file, since this is needed to actually run the app. However, I have some comments scattered around the file to detail and explain the code logic. 
+
+The script for the app is in the `app.R` file, again, with all the required libraries/dependencies at the start. Again, you may need to install the packages first if you for some reason needed to run the app yourself. 
 
 The app itself is quite simple. Once the user uploads an image, the script sends it through the CNN we built and outputs a table with associated probabilities of each type of material, with the highest probability being the main choice by the model. 
 
