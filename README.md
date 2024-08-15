@@ -14,4 +14,6 @@ The second part of the project deploys the model in an RShiny app, so people can
 The app itself is quite simple. Once the user uploads an image, the script sends it through the CNN we built and outputs a table with associated probabilities of each type of material, with the highest probability being the main choice by the model. However, given the limitations of my computer, I was not able to really fine tune the model super well, and there are bound to be cases where the highest probability is not that high. In the case where the highest probability is less than 50%, the app 
 will output a message at the top displaying that it does not know the material for sure. Screenshots of the app are below, where I have the results of classification of some plastic grocery bags (labeled as trash since these cannot be recycled), and the classification of a random image of penguins (to demonstrate when the model cannot have over 50% probability for any given material).
 
+<img width="778" alt="App1" src="https://github.com/user-attachments/assets/0d677070-159c-4a2d-849f-b853586a4385">
 
+<img width="841" alt="App2" src="https://github.com/user-attachments/assets/b79e98b0-79a7-409b-8fd1-24d1255d4c24">
