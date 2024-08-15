@@ -11,7 +11,7 @@ In the first part, I built a (convolutional) neural network model that will allo
 
 I also included a knitted PDF of the notebook for easy access, if you cannot open the raw R notebook file. Please refer to either file regarding details for how the model is built, and all the required libraries/dependencies. The raw notebook file is named `recycleModelBuilding.Rmd`, and the knitted PDF is named `I Spy Garbage_Model Building.pdf`
 
-I will note though, that this is my first project focusing around a neural network, so there is certainly lots of things I did not use, such as finding better and faster ways for refining the model. To some degree, this could be seen as quite simple to some. I hope to come back to this project at a later date to implement new things as I learn them, and bring this project to the next level.
+I will note though, that this is my first project focusing around a neural network, so there are certainly lots of things I did not use or know, such as finding better and faster ways for refining the model. To some degree, this project in this first version could be seen as quite simple to some. I hope to come back to this project at a later date to implement new things as I learn them, and bring this project to the next level.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
