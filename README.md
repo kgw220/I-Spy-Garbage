@@ -2,7 +2,7 @@
 
 Say you want to throw something away, but are unsure on whether you can recycle it or not. Wouldn't it be nice if we could upload a picture of that thing and get the answer? That is the goal of this project!
 
-Note that I used the data set linked here: https://www.kaggle.com/datasets/asdasdasasdas/garbage-classification
+Note that I used the data set linked here: https://www.kaggle.com/datasets/asdasdasasdas/garbage-classification .
 In essence, this methodology could be repeated with other sets of image, and actually gathering all the images can be quite tedious, which is why I used the kaggle data set to effectively skip this.
 
 I have divided this project up into two parts.
