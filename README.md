@@ -36,5 +36,10 @@ If the app does not work, I have screenshots of the app below, where I have the 
 
 <img width="841" alt="App2" src="https://github.com/user-attachments/assets/b79e98b0-79a7-409b-8fd1-24d1255d4c24">
 
+## Future Work
 
 With all that said, I will note, that this is my first project focusing around a neural network, so there are certainly lots of things I did not use or know, such as finding better and faster ways for refining the model. To some degree, this project in this first version could be seen as quite simple to some. I hope to come back to this project at a later date to implement new things as I learn them, and bring this project to the next level.
+
+## License
+
+Distributed under the MIT License. See LICENSE.txt for more information.
