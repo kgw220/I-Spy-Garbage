@@ -20,7 +20,7 @@ The app itself is quite simple. Once the user uploads an image, the script sends
 
 However, given the limitations of my computer, I was not able to really fine tune the model as much as I would've liked, and there are bound to be cases where the highest probability is not that high. In the case where the highest probability is less than 50%, the app will output a message at the top displaying that it does not know the material for sure. 
 
-The app link is attached here: https://kgw220.shinyapps.io/garbageclassificationapp/. Hopefully it works, but there may be issues down the line that cause the link to not work. Again, I hopefully will fix such issues in future iterations of this project.
+The app link is attached here: https://kgw220.shinyapps.io/garbageclassificationapp/. Hopefully it works, but there may be issues down the line that cause the link to not work. I hopefully will fix such issues in future iterations of this project.
 
 If the app does not work, I have screenshots of the app below, where I have the results of classification of some plastic grocery bags (labeled as trash since these cannot be recycled), and the classification of a random image of penguins (to demonstrate when the model cannot have over 50% probability for any given material).
 
