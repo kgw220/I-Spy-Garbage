@@ -1,0 +1,10 @@
+name: garbageclassificationapp
+title: garbageClassificationApp
+username: kgw220
+account: kgw220
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12422350
+bundleId: 8968284
+url: https://kgw220.shinyapps.io/garbageclassificationapp/
+version: 1
