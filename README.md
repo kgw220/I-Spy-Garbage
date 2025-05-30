@@ -35,6 +35,8 @@ I also included a knitted PDF of the notebook for easy access if one just wants 
 
 If you want to run the raw R notebook file itself, then you need to have installed R and, ideally RStudio, the main IDE for R. For the packages I call at the beginning, you will need to use the command `install.packages("PACKAGENAME")` first. For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. 
 
+Note that the images used for training the CNN were refactored to fit my preference. I added the folders used for training and testing images based on how I changed the structure from kaggle, but the file paths in the model building file need to be updated with the folders.
+
 For the second part, I do not use an R notebook file for this, and instead use a raw R script file, since this is needed to actually run the app.
 
 The script for the app is in the `app.R` file, again, with all the required libraries/dependencies at the start. Again, you may need to install the packages first if you for some reason needed to run the app yourself. 
