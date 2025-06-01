@@ -7,75 +7,122 @@ library(rsconnect)
 library(keras)
 library(tensorflow)
 library(tidyverse)
+library(fontawesome) # optional but helps ensure icons render
 
-# loading the model we had trained
-model <- load_model_tf("www/recycleModel")
-load("www/label_list.R")
-target_size <- c(224,224,3)
-options(scipen=999) #prevent scientific number formatting
+# TODO: If model gets registered in MLFlow Model Registry, then update loading model
+# Loading the model
+model <- load_model_tf("../model/final_CNN_model")
+load("../model/label_list.R")
+target_size <- c(224, 224, 3)
 
-# Now we define the UI for our dashboard
+# Prevent scientific notation in the output
+options(scipen = 999) 
+
+# Define the UI for our dashboard
 ui <- dashboardPage(
-  skin="black",
+  skin = "black",
   
-  #(1) Header where we set up the title and a link to my github page
-  
-  dashboardHeader(title=tags$h1("I Spy Garbage",style="font-size: 120%; font-weight: bold; color: blackinstall.packages('rsconnect')"),
-                  titleWidth = 350,
-                  tags$li(class = "dropdown"),
-                  dropdownMenu(type = "notifications", icon = icon("question-circle", "fa-1x"), badgeStatus = NULL,
-                               headerText="",
-                               tags$li(a(href = "https://github.com/kgw220",
-                                         target = "_blank",
-                                         tagAppendAttributes(icon("icon-circle"), class = "info"),
-                                         "Click this button to link to my github page!"))
-                  )),
-  
-  
-  #(2) Sidebar, where we specify to upload the image and all acceptable image formats
-  
-  dashboardSidebar(
-    width=350,
-    fileInput("input_image","File" ,accept = c('.jpg','.jpeg')), 
-    tags$br(),
-    tags$p("Upload the image here.")
+  # (1) Header where we set up the title and a link to my github page
+  dashboardHeader(
+    title = tags$div(
+      style = "font-size: 20px; font-weight: bold; color: black;",
+      "I Spy Garbage"
+    ),
+    titleWidth = 300,
+    tags$li(
+      class = "dropdown",
+      tags$a(
+        href = "https://github.com/kgw220",
+        target = "_blank",
+        style = "color: black; padding: 15px;",
+        icon("github"),
+        "GitHub"
+      )
+    )
   ),
   
+  # (2) Sidebar, where one uploads the image and all acceptable image formats
+  dashboardSidebar(
+    width = 300,
+    tags$h4("Upload Image"),
+    fileInput("input_image", "Choose a .jpg or .jpeg file", accept = c(".jpg", ".jpeg")),
+    tags$hr(),
+    tags$p("Upload a clear, cropped image of the object you want to classify.")
+  ),
   
-  #(3) Body
-  
+  # (3) Body
   dashboardBody(
+    # Custom styling for background and components
+    tags$head(
+      tags$style(HTML("
+        .content-wrapper { background-color: #f4f6f9; }
+        .box { box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+      "))
+    ),
     
-    h4("Instruction:"),
-    tags$br(),tags$p("1. Take a picture of some potential trash, ideally with a background of one color."),
-    tags$p("2. Crop image so that the object fills out most of the image."),
-    tags$p("3. Upload image (.jpg or .jpeg) with the sidebar on the left. "),
-    tags$br(),
-    
+    # Instruction box
     fluidRow(
-      column(h4("Image:"),imageOutput("output_image"), width=6),
-      column(h4("Result:"),tags$br(),textOutput("warntext",), tags$br(),
-             tags$p("This is most likely made of:"),tableOutput("text"),width=6)
-    ),tags$br()
+      box(
+        title = "Instructions",
+        status = "primary",
+        solidHeader = TRUE,
+        width = 12,
+        tags$p("1. Take a picture of some potential trash, ideally with a background of one color."),
+        tags$p("2. Crop image so that the object fills out most of the image."),
+        tags$p("3. Upload image (.jpg or .jpeg) using the sidebar on the left.")
+      )
+    ),
     
-  ))
+    # Output image and prediction results side-by-side
+    fluidRow(
+      column(
+        width = 6,
+        box(
+          title = "Uploaded Image",
+          status = "info",
+          solidHeader = TRUE,
+          width = NULL,
+          imageOutput("output_image")
+        )
+      ),
+      column(
+        width = 6,
+        box(
+          title = "Prediction Results",
+          status = "success",
+          solidHeader = TRUE,
+          width = NULL,
+          textOutput("warntext"),
+          tags$br(),
+          tags$p("This is most likely made of:"),
+          tableOutput("text")
+        )
+      )
+    )
+  )
+)
 
-# Here, we create a server object, which contains all the relevant code for the interactivity of the dashboard
+# Create a server object, which contains all the relevant code for the interactivity of the 
+# dashboard
 server <- function(input, output) {
+  # Setup the image input
+  image <- reactive({
+    image_load(input$input_image$datapath, target_size = target_size[1:2])
+  })
   
-  # setup the image input
-  image <- reactive({image_load(input$input_image$datapath, target_size = target_size[1:2])})
-  
-  # processing the input image through our model, and setting up how the output probabilities are shown
+  # Processing the input image through the model, and setting up how the output probabilities are 
+  # shown
   prediction <- reactive({
-    if(is.null(input$input_image)){return(NULL)}
+    if (is.null(input$input_image)) {
+      return(NULL)
+    }
     x <- image_to_array(image())
     x <- array_reshape(x, c(1, dim(x)))
-    x <- x/255
+    x <- x / 255
     pred <- model %>% predict(x)
     pred <- data.frame("Material" = label_list, "Prediction" = t(pred))
-    pred <- pred[order(pred$Prediction, decreasing=T),][1:5,]
-    pred$Prediction <- sprintf("%.2f %%", 100*pred$Prediction)
+    pred <- pred[order(pred$Prediction, decreasing = TRUE), ][1:5, ]
+    pred$Prediction <- sprintf("%.2f %%", 100 * pred$Prediction)
     pred
   })
   
@@ -86,24 +133,26 @@ server <- function(input, output) {
   # Output that displays a warning if the highest predicted probability is under 50%
   output$warntext <- renderText({
     req(input$input_image)
-    
-    if(as.numeric(substr(prediction()[1,2],1,4)) >= 50){return(NULL)}
-    warntext <- "Warning: I am not sure what this is made out of!"
-    warntext
+    if (as.numeric(gsub(" %", "", prediction()[1, 2])) >= 50) {
+      return(NULL)
+    }
+    "⚠️ Warning: I am not confident about the material classification!"
   })
   
-  # The following renders the uploaded image and also deletes it immediately to avoid memory issues
+  # Render the uploaded image and also deletes it immediately to avoid memory issues
   output$output_image <- renderImage({
     req(input$input_image)
-    
     outfile <- input$input_image$datapath
     contentType <- input$input_image$type
-    list(src = outfile,
-         contentType=contentType,
-         width = 400)
+    list(
+      src = outfile,
+      contentType = contentType,
+      width = 400
+    )
   }, deleteFile = TRUE)
-  
 }
 
 # Run the application
 shinyApp(ui, server)
+
+
