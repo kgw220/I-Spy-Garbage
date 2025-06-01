@@ -6,12 +6,6 @@ library(tensorflow)
 library(tidyverse)
 library(fontawesome) 
 
-# TODO: If model gets registered in MLFlow Model Registry, then update loading model
-# Loading the model
-model <- load_model_tf("final_CNN_model")
-load("label_list.R")
-target_size <- c(224, 224, 3)
-
 # Prevent scientific notation in the output
 options(scipen = 999)
 

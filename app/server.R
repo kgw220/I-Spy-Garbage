@@ -6,12 +6,20 @@ library(tensorflow)
 library(tidyverse)
 library(fontawesome) 
 
+model <- tf$saved_model$load("final_CNN_model")
+predict_fn <- model$signatures[["serving_default"]]
+load("label_list.R")
+target_size <- c(224, 224, 3)
+
 # Create a server object, which contains all the relevant code for the interactivity of the
 # dashboard
 server <- function(input, output) {
   # Setup the image input
   image <- reactive({
-    image_load(input$input_image$datapath, target_size = target_size[1:2])
+    keras::image_load(
+      path = input$input_image$datapath,
+      target_size = target_size[1:2]
+    )
   })
 
   # Processing the input image through our model, and setting up how the output probabilities are
@@ -23,8 +31,16 @@ server <- function(input, output) {
     x <- image_to_array(image())
     x <- array_reshape(x, c(1, dim(x)))
     x <- x / 255
-    pred <- model %>% predict(x)
-    pred <- data.frame("Material" = label_list, "Prediction" = t(pred))
+    
+    # Convert input to tensor and run through the model's predict function
+    input_tensor <- tf$convert_to_tensor(x, dtype = tf$float32)
+    output <- predict_fn(input_tensor)
+    
+    # Extract prediction values from the output
+    output_array <- as.array(output[[1]])  # You can inspect names(output) if this fails
+    
+    # Format predictions into a table
+    pred <- data.frame("Material" = label_list, "Prediction" = t(output_array))
     pred <- pred[order(pred$Prediction, decreasing = TRUE), ][1:5, ]
     pred$Prediction <- sprintf("%.2f %%", 100 * pred$Prediction)
     pred
