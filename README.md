@@ -6,7 +6,7 @@ Say you want to throw something away, but are unsure on whether you can recycle 
 ## Dataset Information
 I used the data set linked here: https://www.kaggle.com/datasets/asdasdasasdas/garbage-classification, which contains images of 5 types of recyclable material and a final category of miscellaneous trash. I also have gone ahead and manually split up the images into a 80/20 training/testing dataset (without randomization, but the order of images does not matter, so this should not add bias).
 
-As a side note, this project could be repeated with other sets of images, and actually gathering all the images can be quite tedious, which is why I used the kaggle data set to effectively skip this. As an example, you could use this as inspiration for looking for defected products on a conveyer belt.
+As a side note, this project could be repeated with other sets of images, and actually gathering all the images can be quite tedious, which is why I used the kaggle data set to effectively skip this. For a real world example, you could use for identifying efected products on a conveyer belt.
 
 ## Project Overview
 I have divided this project up into two parts.
@@ -29,11 +29,11 @@ If the app does not work (perhaps after I am finished this project due to outdat
 
 ##  Repo Overview & Instructions For Deployment
 
-The whole script for the first part is in the format of an R notebook, and in fact, this project is completed in R, instead of the more popular option of using Python (however, I did use the python packages of keras/tensorflow in my R file). 
+The whole script for the first part is in the format of an R notebook, and in fact, this project is completed in R, instead of the more popular option of using Python (however, I did use the python packages of keras/tensorflow in my R file). A notebook was used to make it easy to follow along with each step.
 
-I also included a knitted PDF of the notebook for easy access if one just wants to view the code, if you cannot open the raw R notebook file. Please refer to either file regarding details for how the model is built, and all the required libraries/dependencies. The raw notebook file is named `recycleModelBuilding.Rmd`, and the knitted PDF is named `I Spy Garbage_Model Building.pdf`
+Please refer to either file regarding details for how the model is built, and all the required libraries/dependencies. The raw notebook file is named `recycleModelBuilding.Rmd`, and the knitted PDF is named `I Spy Garbage_Model Building.pdf`
 
-If you want to run the raw R notebook file itself, then you need to have installed R and, ideally RStudio, the main IDE for R. For the packages I call at the beginning, you will need to use the command `install.packages("PACKAGENAME")` first. For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. 
+If you want to run the raw R notebook file itself, then you need to have installed R and, ideally RStudio, the main IDE for R. For the packages I call at the beginning, you will need to use the command `install.packages("PACKAGENAME")` first. For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. You also would need to follow the instructions linked here to get MLFlow to work, which relies on the python installation: https://cran.r-project.org/web/packages/mlflow/readme/README.html
 
 Note that the images used for training the CNN were refactored to fit my preference. I added the folders used for training and testing images based on how I changed the structure from kaggle, but the file paths in the model building file need to be updated with the folders.
 
@@ -43,7 +43,7 @@ The script for the app is in the `app.R` file, again, with all the required libr
 
 ## Future Work
 
-I would like to incorperate important MLOps things like MLFlow into the workflow when training the CNN, and adding my own images of miscelleous trash to improve the accuracy of this category. However, the CNN takes 1-2 hours to train with one run with my computer, so this is infeasible. Though, I may come back to this project if I can get a better computer that makes tuning the CNN not so much of a tedious task.
+At this point, I'm mostly limited by the power of my computer for future improvements (training the CNN takes a while). Though, I may come back and add my own images of miscelleous trash to improve the accuracy of this category. I documented some TODOs toward the end of my notebook regarding ideal enhancements, mainly regarding the MLOPs side of the project.
 
 ## License
 
