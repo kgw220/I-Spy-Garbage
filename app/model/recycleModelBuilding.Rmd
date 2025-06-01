@@ -1,0 +1,516 @@
+---
+title: 'I Spy Garbage: Model Building'
+output:
+  html_notebook: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+I used the data set linked here: 
+<https://www.kaggle.com/datasets/asdasdasasdas/garbage-classification>
+
+I have gone ahead and manually divided the sets of images for each material into training and 
+testing sets, where testing sets compose of the last 20% of images in each folder. None of the 
+images are in any particular order, so this should be fine opposed to doing a randomized split 
+though this topic could be explored further).
+
+It can be quite difficult to gather data manually, which is why I use a data set that is already 
+organized.
+
+## Setup for our model
+
+```{r message=FALSE}
+library(tidyverse)
+library(mlflow)
+library(keras)
+library(tensorflow)
+library(reticulate)
+```
+
+I will also go ahead and set the random seed. I also go ahead and set an environmental variable to 0 
+since it caused a warning when I ran this for the first time.
+
+```{r warning=FALSE}
+# Setting seed for reproducible results
+set_random_seed(220, disable_gpu = TRUE)
+
+# Turning off any potential floating-point round-off errors
+TF_ENABLE_ONEDNN_OPTS <- 0
+```
+
+Next, I create a list of each label for all our potential material classifications. I set my current
+working directory to the `model` directory in my project.
+
+```{r}
+# Get a unique list of all material types
+label_list <- dir("train_images/")
+output_n <- length(label_list)
+save(label_list, file = "label_list.R")
+```
+
+I also go ahead and set some parameters for image re-scaling. This will be quite useful since it 
+will mean the images I put into the model after it is built will not require specific formatting 
+from the user.
+
+```{r}
+# Setting dimensions for images
+width <- 224
+height <- 224
+target_size <- c(width, height)
+
+# Number of color changes
+rgb <- 3
+```
+
+I also will set the path to our training data.
+
+```{r}
+path_train <- "train_images/"
+```
+
+The next step is to use some data augmentation. This essentially applies random amounts of blurs or 
+rotations to add some variation to our data, which helps to avoid over-fitting. I will also go ahead 
+and set 25% of the training image set as validation for when I build the model.
+
+```{r}
+train_data_gen <- image_data_generator(rescale = 1 / 255, validation_split = .25)
+```
+
+Now I use a function called `flow_images_from_directory` to batch process our images with the 
+generator function I defined above. I link this up to our training and validation data, and set some 
+basic parameters.
+
+```{r}
+train_images <- flow_images_from_directory(path_train,
+  train_data_gen,
+  subset = "training",
+  target_size = target_size,
+  class_mode = "categorical",
+  shuffle = F,
+  classes = label_list,
+  seed = 220
+)
+
+validation_images <- flow_images_from_directory(path_train,
+  train_data_gen,
+  subset = "validation",
+  target_size = target_size,
+  class_mode = "categorical",
+  classes = label_list,
+  seed = 220
+)
+```
+
+I will note that I could have just used separate folders for training and validation, but I just 
+chose to let `keras` do it with a random split.
+
+To check the work so far, I output a table of our classes in our training images.
+
+```{r}
+table(train_images$classes)
+```
+
+This corresponds to the number of pictures in each folder.
+
+## Training the model:
+
+Given the nature of this project, I will be using a convoluted neural network (CNN).
+
+For the sake of this project, there is a way I can ensure good baseline results, by using models 
+that were pre-trained in the past for other applications. I choose the xception-network with the 
+weights pre-trained on the ImageNet data set, a large data set used for object recognition. However,
+I will edit the final layers, since this is the output layer that classifies the images, and of 
+course, I need to adjust it to train for our own sets of images This is done by setting the 
+parameter `include_top` to FALSE.
+
+```{r warning=FALSE}
+mod_base <- application_xception(
+  weights = "imagenet",
+  include_top = FALSE,
+  input_shape = c(width, height, 3)
+)
+
+# Freeze the weights so they are no longer trainable
+freeze_weights(mod_base)
+```
+
+Below, I define a function that will build that final layer that I left out from the `imagenet` 
+model. I set some parameters to variables that I will use to fine-tune our model later.
+
+```{r}
+# learning_rate controls step size in backpropagation
+# E.g. new weights = old weight - learning_rate * gradient
+
+# dropout_rate sets the proportion of neurons to turn off per epoch,
+# which helps with promoting diversity by limiting the data per epoch
+
+# n_dense sets the number of output neurons that become fully connected
+# with every input neuron for that layer
+model_function <- function(learning_rate = 0.0001, dropout_rate = 0.2,
+                           n_dense = 1024) {
+  # Resets all generated states
+  k_clear_session()
+
+  # Setup the architecture of model, which is needed for CNN (or NNs in general)
+  # Sequential is used since we have multiple layers to define
+  model <- keras_model_sequential() %>%
+    # mod_base takes the base CNN from `imagenet``
+    mod_base() %>%
+    # Get a pooling layer to help reduce size of images by getting the most potent pixels within a
+    # small area (still able to capture significant patterns)
+    layer_global_average_pooling_2d() %>%
+    layer_dense(units = n_dense) %>%
+    # Relu activation function to help look for non-linear relationships (since NN layers are linear
+    # in nature, since you just multiply a numerical weight from each input neuron, and add a bias
+    # similar to regression)
+    layer_activation("relu") %>%
+    layer_dropout(rate = dropout_rate, seed = 220) %>%
+    # Final layer is the softmax activation function, to convert all the values into a final
+    # prediction for multi-class classification
+    layer_dense(units = output_n, activation = "softmax")
+
+  # Setup the architecture with the loss function, learning rate with the chosen optimizer function
+  # (controls how weights get updated in backprop), and the scoring metric to use
+  model %>% compile(
+    loss = "categorical_crossentropy",
+    optimizer = optimizer_adam(learning_rate = learning_rate),
+    metrics = "accuracy"
+  )
+
+  return(model)
+}
+```
+
+Now, I let the model compile with those base values and inspect the architecture.
+
+```{r}
+model <- model_function()
+model
+```
+
+I can see that there 20 million parameters from the xception model that are non-trainable, since I 
+only train the top layer, which is a 1024 x 1 feature vector that is densely connected to the output 
+classification layer. This is essentially 1024 variables, which take on certain values depending on 
+if our image has certain properties, and all of this is trained during the convolution layers of the 
+xception network (aka the 'black box').
+
+With that said, let is train the model with our training data now!
+
+```{r warning=FALSE}
+# Number of training samples fed to our neural network at once
+batch_size <- 32
+# Number of times our entire training data set is passed through the neural network
+epochs <- 6
+
+hist <- model %>% fit_generator(
+  train_images,
+
+  # Specify number of steps based on # of total images divided by batch size
+  steps_per_epoch = train_images$n %/% batch_size,
+  epochs = epochs,
+  validation_data = validation_images,
+
+  # Specify number of steps based on # of total images divided by batch size
+  validation_steps = validation_images$n %/% batch_size,
+  verbose = 2
+)
+```
+
+## Testing our model
+
+So with our validation data, I got around 75% accuracy. This could be improved, but shows that the 
+model was not over fit to our training data since the training accuracy was not vastly greater than 
+the validation data.
+
+For fun, I will use a candy wrapper image that was not in our training data to test out how our 
+model predicts it. Again, with how I setup the model beforehand, there is no need for me to "set up"
+the image beforehand with a specific dimension and such - the model will do that automatically.
+
+```{r}
+# Load image
+test_image <- image_load("test_image.jpg",
+  target_size = target_size
+)
+
+# Preprocessing the image
+x <- image_to_array(test_image)
+x <- array_reshape(x, c(1, dim(x)))
+x <- x / 255
+
+# Make prediction with our image
+pred <- model %>% predict(x)
+pred <- data.frame("Type of Waste" = label_list, "Probability" = t(pred))
+pred <- pred[order(pred$Probability, decreasing = T), ][1:6, ]
+pred$Probability <- paste(format(100 * pred$Probability, 2), "%")
+pred
+```
+
+Looks like the model predicted correctly, since this is a mostly paper candy wrapper.
+
+Now I raise a question. Is there a particular type of material in our classification that our model 
+does not accurately predict (which would be the main source of our lower accuracy)? The code block 
+below will show us just that.
+
+I will generate a matrix of all predictions for each image in our validation data for every material 
+type. I label the highest prediction as the predicted class and then compare it with the actual 
+correct class to get the % of correct classifications.
+
+```{r warning=FALSE}
+# Predicting with our model with the validation images
+predictions <- model %>%
+  predict_generator(
+    generator = validation_images,
+    steps = validation_images$n
+  ) %>%
+  as.data.frame()
+
+names(predictions) <- paste0("Class", 0:5)
+
+# Bunch of various data processing to get the data into the right form for the graph
+predictions$predicted_class <-
+  paste0("Class", apply(predictions, 1, which.max) - 1)
+predictions$true_class <- paste0("Class", validation_images$classes)
+
+predictions %>%
+  group_by(true_class) %>%
+  summarise(percentage_true = 100 * sum(predicted_class ==
+    true_class) / n()) %>%
+  left_join(data.frame(
+    typeOfWaste = names(validation_images$class_indices),
+    true_class = paste0("Class", 0:5)
+  ), by = "true_class") %>%
+  select(typeOfWaste, percentage_true) %>%
+  mutate(typeOfWaste = fct_reorder(typeOfWaste, percentage_true)) %>%
+  ggplot(aes(
+    x = typeOfWaste, y = percentage_true, fill = percentage_true,
+    label = percentage_true
+  )) +
+  geom_col() +
+  theme_minimal() +
+  coord_flip() +
+  geom_text(nudge_y = 3) +
+  ggtitle("Percentage correct classifications by material")
+```
+
+I can see that the trash category does not appear to get accurate classifications. This makes sense 
+as well, since this is a broad category with many images of different things that are not extremely 
+similar with one another, compared to the other categories with a well established theme.
+
+## Tuning our model
+
+So there are multiple ways to try and solve the problem with our model having poor accuracy. I could
+just try and gather more image data for the trash category, but given this is more of a broad 
+category, this may not be that easy. So instead, I try tuning the model with MLFlow to be able to 
+test different sets of hyperparameters, and find the one with the best performance on the validation 
+images.
+
+This is basically just grid search - I could not find other popular hyperparameter tuning algorithms
+like Tree of Parzen Estimators that were built in with R, so I got lazy and just went with this a
+pproach. Certainly, this would be more efficient if more research was done, or if I wanted to 
+implement my own algorithm.
+
+```{r}
+# More things could be added to the mlflow workflow (more metrics, loss functions, artifacts, etc),
+# but for this usecase, I don't think its necessary, since training takes a long time as is
+
+# Run "mlflow ui --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5000" in command
+# prompt so that MLFlow runs. Specifying database so runs are saved and not just ran locally
+mlflow_set_tracking_uri("http://127.0.0.1:5000")
+
+# Set the experiment
+mlflow_set_experiment("cnn_sgd_hyperparameter_tuning")
+
+# TODO: Better hyperparameter selection algorithm
+# TODO: Rank models based on validation loss
+# TODO: Use different scoring metric instead of default accuracy
+# Define grid of hyperparameters
+learning_rates <- c(0.01, 0.001)
+momentums <- c(0.0, 0.9)
+dropout_rates <- c(0.3, 0.5)
+
+# Loop through all combinations of hyperparameters
+for (learning_rate in learning_rates) {
+  for (momentum in momentums) {
+    for (dropout_rate in dropout_rates) {
+      with(mlflow_start_run(), {
+        # Reinitialize our set of images
+        train_images <- flow_images_from_directory(path_train,
+          train_data_gen,
+          subset = "training",
+          target_size = target_size,
+          class_mode = "categorical",
+          shuffle = F,
+          classes = label_list,
+          seed = 220
+        )
+
+        validation_images <- flow_images_from_directory(path_train,
+          train_data_gen,
+          subset = "validation",
+          target_size = target_size,
+          class_mode = "categorical",
+          classes = label_list,
+          seed = 220
+        )
+
+        # Log current hyperparameters
+        mlflow_log_param("batch_size", batch_size)
+        mlflow_log_param("epochs", epochs)
+        mlflow_log_param("learning_rate", learning_rate)
+        mlflow_log_param("momentum", momentum)
+        mlflow_log_param("dropout_rate", dropout_rate)
+
+        # Setting up same model architecture as before
+        model <- keras_model_sequential() %>%
+          mod_base() %>%
+          layer_global_average_pooling_2d() %>%
+          layer_dense(units = 1024) %>%
+          layer_activation("relu") %>%
+          layer_dropout(rate = dropout_rate, seed = 220) %>%
+          layer_dense(units = output_n, activation = "softmax")
+
+        # Compile with SGD optimizer instead of adams optimizer
+        model %>% compile(
+          loss = "categorical_crossentropy",
+          optimizer = optimizer_sgd(learning_rate = learning_rate, momentum = momentum),
+          metrics = c("accuracy")
+        )
+
+        steps_per_epoch <- max(1, floor(train_images$n / batch_size))
+        validation_steps <- max(1, floor(validation_images$n / batch_size))
+
+        # Train the model, applying floor so there is always enough data
+        hist <- model %>% fit_generator(
+          train_images,
+          steps_per_epoch = steps_per_epoch,
+          epochs = epochs,
+          validation_data = validation_images,
+          validation_steps = validation_steps,
+          verbose = 2
+        )
+
+        # Log final validation accuracy
+        val_acc <- hist$metrics$val_accuracy[epochs]
+      })
+    }
+  }
+}
+```
+
+Now, I can extract the parameters from the best run, to train one final model with these parameters.
+
+```{r}
+experiment <- mlflow_get_experiment(name = "cnn_sgd_hyperparameter_tuning")
+
+# Get all runs
+runs <- mlflow_search_runs(experiment_ids = experiment$experiment_id)
+# Could also just manually save run data from MLFlow, and load it as such
+# runs <- read.csv("runs.csv")
+
+# Sort by val_accuracy descending
+runs <- runs[order(-as.numeric(runs$metrics.val_accuracy)), ]
+
+# Extract best run and the associated data
+best_run <- runs[1, ]
+```
+
+```{r}
+# Retrieve columns with parameters by the params prefix, and convert it to a named list
+best_params <- best_run[, grepl("^params\\.", names(best_run))]
+params_list <- as.list(best_params)
+names(params_list) <- sub("^params\\.", "", names(params_list))
+```
+
+## Finalizing our model
+
+Finally, I can retrain our model with the best parameters identified above. Since this is the final 
+version, I will combine my training and validation data into one "training" set. Ideally, I would 
+save this into the MLFlow Model Registry, but I had issues doing that, so I will just train it as I 
+had originally for simplicity.
+
+```{r}
+# Recreating the image generator
+train_data_gen_full <- image_data_generator(rescale = 1 / 255)
+
+# Load all images (no validation split)
+full_train_images <- flow_images_from_directory(
+  path_train,
+  train_data_gen_full,
+  target_size = target_size,
+  class_mode = "categorical",
+  classes = label_list,
+  shuffle = TRUE,
+  seed = 220
+)
+
+# Extract best parameters
+batch_size <- params_list$batch_size
+epochs <- params_list$epochs
+dropout_rate <- params_list$dropout_rate
+learning_rate <- params_list$learning_rate
+momentum <- params_list$momentum
+
+steps_per_epoch <- floor(full_train_images$n / batch_size)
+
+# Re-define the model structure one more time with the optimal parameters
+model <- keras_model_sequential() %>%
+  mod_base() %>%
+  layer_global_average_pooling_2d() %>%
+  layer_dense(units = 1024, activation = "relu") %>%
+  layer_dropout(rate = params_list$dropout_rate) %>%
+  layer_dense(units = output_n, activation = "softmax")
+
+model %>% compile(
+  loss = "categorical_crossentropy",
+  optimizer = optimizer_sgd(
+    learning_rate = params_list$learning_rate,
+    momentum = momentum
+  ),
+  metrics = c("accuracy")
+)
+
+# Retrain model on full image set, using same architecture as before
+# TODO: Ideally save this model to model registry
+hist <- model %>% fit_generator(
+  full_train_images,
+  steps_per_epoch = steps_per_epoch,
+  epochs = epochs,
+  verbose = 2
+)
+```
+
+I can see how this final model works with the images.
+
+```{r}
+# Setting up test_images similar to the training/validation data
+path_test <- "test_images/" 
+
+test_data_gen <- image_data_generator(rescale = 1 / 255)
+
+test_images <- flow_images_from_directory(path_test,
+  test_data_gen,
+  target_size = target_size,
+  class_mode = "categorical",
+  classes = label_list,
+  shuffle = TRUE,
+  seed = 220
+)
+
+model %>% evaluate_generator(test_images,
+  steps = test_images$n
+)
+```
+
+Overall, I noticed a \~10% increase in accuracy with the testing accuracy compared to earlier, which 
+is good. Certainly, there is room for improvement based on the TODOs I documented above, but for now
+I will call the model complete and consider this my champion model.
+
+With that said, I will save our model, and call this model in the second part of this project, where
+I incorporate this model into a Shiny App.
+
+```{r}
+# TODO: Instead of saving model locally, register model into Model Registry
+model %>% save_model_tf("final_CNN_model")
+```
