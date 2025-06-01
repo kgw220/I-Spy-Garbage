@@ -41,8 +41,6 @@ For the second part, I do not use an R notebook file for this, and instead use a
 
 The script for the app is in the `app.R` file, again, with all the required libraries/dependencies at the start. Again, you may need to install the packages first if you for some reason needed to run the app yourself. 
 
-Any other files in the repo are just the results from running many processes. In particular, I added my own explanation of how an CNN works for my own personal understanding in the `model` directory, but this of course is not necessary to run the project at all.
-
 ## Future Work
 
 At this point, I'm mostly limited by the power of my computer for future improvements (training the CNN takes a while). Though, I may come back and add my own images of miscelleous trash to improve the accuracy of this category. I documented some TODOs toward the end of my notebook regarding ideal enhancements, mainly regarding the MLOPs side of the project.
