@@ -316,16 +316,16 @@ implement my own algorithm.
 # but for this usecase, I don't think its necessary, since training takes a long time as is
 
 # Run "mlflow ui --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5000" in command
-# prompt, specifying database so runs are saved and not just ran locally
+# prompt so that MLFlow runs. Specifying database so runs are saved and not just ran locally
 mlflow_set_tracking_uri("http://127.0.0.1:5000")
 
 # Set the experiment
 mlflow_set_experiment("cnn_sgd_hyperparameter_tuning")
 
-# Define grid of hyperparameters
 # TODO: Better hyperparameter selection algorithm
 # TODO: Rank models based on validation loss
 # TODO: Use different scoring metric instead of default accuracy
+# Define grid of hyperparameters
 learning_rates <- c(0.01, 0.001)
 momentums <- c(0.0, 0.9)
 dropout_rates <- c(0.3, 0.5)
