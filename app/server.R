@@ -1,3 +1,11 @@
+library(shiny)
+library(shinydashboard)
+library(rsconnect)
+library(keras)
+library(tensorflow)
+library(tidyverse)
+library(fontawesome) 
+
 # Create a server object, which contains all the relevant code for the interactivity of the
 # dashboard
 server <- function(input, output) {
