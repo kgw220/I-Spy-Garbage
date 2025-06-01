@@ -98,6 +98,3 @@ ui <- dashboardPage(
     )
   )
 )
-
-# Run the application
-shinyApp(ui, server)
