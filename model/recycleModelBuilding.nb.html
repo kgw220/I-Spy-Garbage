@@ -2598,17 +2598,28 @@ Epoch 6/6
 <h2>Finalizing our model</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVYRzV0Ykdac2IzZGZjMlYwWDNSeVlXTnJhVzVuWDNWeWFTaGNJbWgwZEhBNkx5OXNiMk5oYkdodmMzUTZOVEF3TUZ3aUtWeHViV3htYkc5M1gzTmxkRjlsZUhCbGNtbHRaVzUwS0Z3aVkyNXVYM05uWkY5b2VYQmxjbkJoY21GdFpYUmxjbDkwZFc1cGJtZGNJaWxjYm1CZ1lDSjkgLS0+XG5cbmBgYHJcblxubWxmbG93X3NldF90cmFja2luZ191cmkoXCJodHRwOi8vbG9jYWxob3N0OjUwMDBcIilcbm1sZmxvd19zZXRfZXhwZXJpbWVudChcImNubl9zZ2RfaHlwZXJwYXJhbWV0ZXJfdHVuaW5nXCIpXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5tbGZsb3dfc2V0X3RyYWNraW5nX3VyaShcImh0dHA6Ly9sb2NhbGhvc3Q6NTAwMFwiKVxubWxmbG93X3NldF9leHBlcmltZW50KFwiY25uX3NnZF9oeXBlcnBhcmFtZXRlcl90dW5pbmdcIilcbmBgYCJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVYRzV0Ykdac2IzZGZjMlYwWDNSeVlXTnJhVzVuWDNWeWFTaGNJbWgwZEhBNkx5OXNiMk5oYkdodmMzUTZOVEF3TUZ3aUtWeHVZR0JnSW4wPSAtLT5cblxuYGBgclxuXG5tbGZsb3dfc2V0X3RyYWNraW5nX3VyaShcImh0dHA6Ly9sb2NhbGhvc3Q6NTAwMFwiKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5tbGZsb3dfc2V0X3RyYWNraW5nX3VyaShcImh0dHA6Ly9sb2NhbGhvc3Q6NTAwMFwiKVxuYGBgIn0= -->
 <pre class="r"><code>
-mlflow_set_tracking_uri(&quot;http://localhost:5000&quot;)
-mlflow_set_experiment(&quot;cnn_sgd_hyperparameter_tuning&quot;)</code></pre>
+mlflow_set_tracking_uri(&quot;http://localhost:5000&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoIGluIGlmIChncmVwKFwiUkVTT1VSQ0VfRE9FU19OT1RfRVhJU1RcIiwgZSRtZXNzYWdlLCBmaXhlZCA9IFRSVUUpKSB7IDogXG4gIGFyZ3VtZW50IGlzIG9mIGxlbmd0aCB6ZXJvXG5FcnJvciBkdXJpbmcgd3JhcHVwOiBub3QgdGhhdCBtYW55IGZyYW1lcyBvbiB0aGUgc3RhY2tcbkVycm9yOiBubyBtb3JlIGVycm9yIGhhbmRsZXJzIGF2YWlsYWJsZSAocmVjdXJzaXZlIGVycm9ycz8pOyBpbnZva2luZyAnYWJvcnQnIHJlc3RhcnRcblx1MDAxYmdcbiJ9 -->
-<pre><code>G1;H1;Errorh in if (grep(&quot;RESOURCE_DOES_NOT_EXIST&quot;, e$message, fixed = TRUE)) { : 
-  argument is of length zero
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoIGluIG1sZmxvd19zZXRfdHJhY2tpbmdfdXJpKFwiaHR0cDovL2xvY2FsaG9zdDo1MDAwXCIpIDogXG4gIGNvdWxkIG5vdCBmaW5kIGZ1bmN0aW9uIFwibWxmbG93X3NldF90cmFja2luZ191cmlcIlxuRXJyb3IgZHVyaW5nIHdyYXB1cDogbm90IHRoYXQgbWFueSBmcmFtZXMgb24gdGhlIHN0YWNrXG5FcnJvcjogbm8gbW9yZSBlcnJvciBoYW5kbGVycyBhdmFpbGFibGUgKHJlY3Vyc2l2ZSBlcnJvcnM/KTsgaW52b2tpbmcgJ2Fib3J0JyByZXN0YXJ0XG5cdTAwMWJnXG4ifQ== -->
+<pre><code>G1;H1;Errorh in mlflow_set_tracking_uri(&quot;http://localhost:5000&quot;) : 
+  could not find function &quot;mlflow_set_tracking_uri&quot;
 Error during wrapup: not that many frames on the stack
+Error: no more error handlers available (recursive errors?); invoking &#39;abort&#39; restart
+g</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHViV3htYkc5M1gzTmxkRjlsZUhCbGNtbHRaVzUwS0Z3aVkyNXVYM05uWkY5b2VYQmxjbkJoY21GdFpYUmxjbDkwZFc1cGJtZGNJaWxjYm1CZ1lDSjkgLS0+XG5cbmBgYHJcbm1sZmxvd19zZXRfZXhwZXJpbWVudChcImNubl9zZ2RfaHlwZXJwYXJhbWV0ZXJfdHVuaW5nXCIpXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWxmbG93X3NldF9leHBlcmltZW50KFwiY25uX3NnZF9oeXBlcnBhcmFtZXRlcl90dW5pbmdcIilcbmBgYCJ9 -->
+<pre class="r"><code>mlflow_set_experiment(&quot;cnn_sgd_hyperparameter_tuning&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoIGluIG1sZmxvd19zZXRfZXhwZXJpbWVudChcImNubl9zZ2RfaHlwZXJwYXJhbWV0ZXJfdHVuaW5nXCIpIDogXG4gIGNvdWxkIG5vdCBmaW5kIGZ1bmN0aW9uIFwibWxmbG93X3NldF9leHBlcmltZW50XCJcblx1MDAxYmdcdTAwMWJHMTtcdTAwMWJIMTtFcnJvciBkdXJpbmcgd3JhcHVwXHUwMDFiaDogbm90IHRoYXQgbWFueSBmcmFtZXMgb24gdGhlIHN0YWNrXG5FcnJvcjogbm8gbW9yZSBlcnJvciBoYW5kbGVycyBhdmFpbGFibGUgKHJlY3Vyc2l2ZSBlcnJvcnM/KTsgaW52b2tpbmcgJ2Fib3J0JyByZXN0YXJ0XG5cdTAwMWJnXG4ifQ== -->
+<pre><code>G1;H1;Errorh in mlflow_set_experiment(&quot;cnn_sgd_hyperparameter_tuning&quot;) : 
+  could not find function &quot;mlflow_set_experiment&quot;
+gG1;H1;Error during wrapuph: not that many frames on the stack
 Error: no more error handlers available (recursive errors?); invoking &#39;abort&#39; restart
 g</code></pre>
 <!-- rnb-output-end -->
@@ -2617,9 +2628,59 @@ Error: no more error handlers available (recursive errors?); invoking &#39;abort
 <pre class="r"><code>experiment &lt;- mlflow_get_experiment(name = &quot;cnn_sgd_hyperparameter_tuning&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoIGluIHV0aWxzOjpwYWNrYWdlVmVyc2lvbihcIm1sZmxvd1wiKSA6IFxuICB0aGVyZSBpcyBubyBwYWNrYWdlIGNhbGxlZCDigJhtbGZsb3figJlcblx1MDAxYmdcbiJ9 -->
-<pre><code>G1;H1;Errorh in utils::packageVersion(&quot;mlflow&quot;) : 
-  there is no package called ‘mlflow’
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoIGluIG1sZmxvd19nZXRfZXhwZXJpbWVudChuYW1lID0gXCJjbm5fc2dkX2h5cGVycGFyYW1ldGVyX3R1bmluZ1wiKSA6IFxuICBjb3VsZCBub3QgZmluZCBmdW5jdGlvbiBcIm1sZmxvd19nZXRfZXhwZXJpbWVudFwiXG5FcnJvciBkdXJpbmcgd3JhcHVwOiBub3QgdGhhdCBtYW55IGZyYW1lcyBvbiB0aGUgc3RhY2tcbkVycm9yOiBubyBtb3JlIGVycm9yIGhhbmRsZXJzIGF2YWlsYWJsZSAocmVjdXJzaXZlIGVycm9ycz8pOyBpbnZva2luZyAnYWJvcnQnIHJlc3RhcnRcblx1MDAxYmdcbiJ9 -->
+<pre><code>G1;H1;Errorh in mlflow_get_experiment(name = &quot;cnn_sgd_hyperparameter_tuning&quot;) : 
+  could not find function &quot;mlflow_get_experiment&quot;
+Error during wrapup: not that many frames on the stack
+Error: no more error handlers available (recursive errors?); invoking &#39;abort&#39; restart
+g</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVJeUJIWlhRZ1lXeHNJSEoxYm5OY2JuSjFibk1nUEMwZ2JXeG1iRzkzWDNObFlYSmphRjl5ZFc1ektHVjRjR1Z5YVcxbGJuUmZhV1J6SUQwZ1pYaHdaWEpwYldWdWRDUmxlSEJsY21sdFpXNTBYMmxrS1Z4dVlHQmdJbjA9IC0tPlxuXG5gYGByXG4jIEdldCBhbGwgcnVuc1xucnVucyA8LSBtbGZsb3dfc2VhcmNoX3J1bnMoZXhwZXJpbWVudF9pZHMgPSBleHBlcmltZW50JGV4cGVyaW1lbnRfaWQpXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBHZXQgYWxsIHJ1bnNcbnJ1bnMgPC0gbWxmbG93X3NlYXJjaF9ydW5zKGV4cGVyaW1lbnRfaWRzID0gZXhwZXJpbWVudCRleHBlcmltZW50X2lkKVxuYGBgIn0= -->
+<pre class="r"><code># Get all runs
+runs &lt;- mlflow_search_runs(experiment_ids = experiment$experiment_id)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoIGluIG1sZmxvd19zZWFyY2hfcnVucyhleHBlcmltZW50X2lkcyA9IGV4cGVyaW1lbnQkZXhwZXJpbWVudF9pZCkgOiBcbiAgY291bGQgbm90IGZpbmQgZnVuY3Rpb24gXCJtbGZsb3dfc2VhcmNoX3J1bnNcIlxuRXJyb3IgZHVyaW5nIHdyYXB1cDogbm90IHRoYXQgbWFueSBmcmFtZXMgb24gdGhlIHN0YWNrXG5FcnJvcjogbm8gbW9yZSBlcnJvciBoYW5kbGVycyBhdmFpbGFibGUgKHJlY3Vyc2l2ZSBlcnJvcnM/KTsgaW52b2tpbmcgJ2Fib3J0JyByZXN0YXJ0XG5cdTAwMWJnXG4ifQ== -->
+<pre><code>G1;H1;Errorh in mlflow_search_runs(experiment_ids = experiment$experiment_id) : 
+  could not find function &quot;mlflow_search_runs&quot;
+Error during wrapup: not that many frames on the stack
+Error: no more error handlers available (recursive errors?); invoking &#39;abort&#39; restart
+g</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVJeUJUYjNKMElHSjVJSFpoYkY5aFkyTjFjbUZqZVNCa1pYTmpaVzVrYVc1blhHNXlkVzV6SUR3dElISjFibk5iYjNKa1pYSW9MV0Z6TG01MWJXVnlhV01vY25WdWN5UnRaWFJ5YVdOekxuWmhiRjloWTJOMWNtRmplU2twTENCZFhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuIyBTb3J0IGJ5IHZhbF9hY2N1cmFjeSBkZXNjZW5kaW5nXG5ydW5zIDwtIHJ1bnNbb3JkZXIoLWFzLm51bWVyaWMocnVucyRtZXRyaWNzLnZhbF9hY2N1cmFjeSkpLCBdXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTb3J0IGJ5IHZhbF9hY2N1cmFjeSBkZXNjZW5kaW5nXG5ydW5zIDwtIHJ1bnNbb3JkZXIoLWFzLm51bWVyaWMocnVucyRtZXRyaWNzLnZhbF9hY2N1cmFjeSkpLCBdXG5gYGAifQ== -->
+<pre class="r"><code># Sort by val_accuracy descending
+runs &lt;- runs[order(-as.numeric(runs$metrics.val_accuracy)), ]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoOiBvYmplY3QgJ3J1bnMnIG5vdCBmb3VuZFxuRXJyb3IgZHVyaW5nIHdyYXB1cDogbm90IHRoYXQgbWFueSBmcmFtZXMgb24gdGhlIHN0YWNrXG5FcnJvcjogbm8gbW9yZSBlcnJvciBoYW5kbGVycyBhdmFpbGFibGUgKHJlY3Vyc2l2ZSBlcnJvcnM/KTsgaW52b2tpbmcgJ2Fib3J0JyByZXN0YXJ0XG5cdTAwMWJnXG4ifQ== -->
+<pre><code>G1;H1;Errorh: object &#39;runs&#39; not found
+Error during wrapup: not that many frames on the stack
+Error: no more error handlers available (recursive errors?); invoking &#39;abort&#39; restart
+g</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVJeUJGZUhSeVlXTjBJR0psYzNRZ2NuVnVYRzVpWlhOMFgzSjFiaUE4TFNCeWRXNXpXekVzSUYxY2JtQmdZQ0o5IC0tPlxuXG5gYGByXG4jIEV4dHJhY3QgYmVzdCBydW5cbmJlc3RfcnVuIDwtIHJ1bnNbMSwgXVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBFeHRyYWN0IGJlc3QgcnVuXG5iZXN0X3J1biA8LSBydW5zWzEsIF1cbmBgYCJ9 -->
+<pre class="r"><code># Extract best run
+best_run &lt;- runs[1, ]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoOiBvYmplY3QgJ3J1bnMnIG5vdCBmb3VuZFxuRXJyb3IgZHVyaW5nIHdyYXB1cDogbm90IHRoYXQgbWFueSBmcmFtZXMgb24gdGhlIHN0YWNrXG5FcnJvcjogbm8gbW9yZSBlcnJvciBoYW5kbGVycyBhdmFpbGFibGUgKHJlY3Vyc2l2ZSBlcnJvcnM/KTsgaW52b2tpbmcgJ2Fib3J0JyByZXN0YXJ0XG5cdTAwMWJnXG4ifQ== -->
+<pre><code>G1;H1;Errorh: object &#39;runs&#39; not found
+Error during wrapup: not that many frames on the stack
+Error: no more error handlers available (recursive errors?); invoking &#39;abort&#39; restart
+g</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZbVZ6ZEY5eWRXNWNibUJnWUNKOSAtLT5cblxuYGBgclxuYmVzdF9ydW5cbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmVzdF9ydW5cbmBgYCJ9 -->
+<pre class="r"><code>best_run</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiRzE7XHUwMDFiSDE7RXJyb3JcdTAwMWJoOiBvYmplY3QgJ2Jlc3RfcnVuJyBub3QgZm91bmRcbkVycm9yIGR1cmluZyB3cmFwdXA6IG5vdCB0aGF0IG1hbnkgZnJhbWVzIG9uIHRoZSBzdGFja1xuRXJyb3I6IG5vIG1vcmUgZXJyb3IgaGFuZGxlcnMgYXZhaWxhYmxlIChyZWN1cnNpdmUgZXJyb3JzPyk7IGludm9raW5nICdhYm9ydCcgcmVzdGFydFxuXHUwMDFiZ1xuIn0= -->
+<pre><code>G1;H1;Errorh: object &#39;best_run&#39; not found
+Error during wrapup: not that many frames on the stack
+Error: no more error handlers available (recursive errors?); invoking &#39;abort&#39; restart
 g</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
