@@ -1,10 +1,16 @@
+###
+# This file provides all the relevant code for the server part of my CNN app (involving hosting it
+# onto shiny, and also actually predicting the type of material from an image with my model from my
+# model directory).
+###
+
 library(shiny)
 library(shinydashboard)
 library(rsconnect)
 library(keras)
 library(tensorflow)
 library(tidyverse)
-library(fontawesome) 
+library(fontawesome)
 
 model <- tf$saved_model$load("final_CNN_model")
 predict_fn <- model$signatures[["serving_default"]]
@@ -20,14 +26,14 @@ server <- function(input, output) {
   # Setup the image input
   image <- reactive({
     req(input$input_image)
-    
+
     img_raw <- tf$io$read_file(input$input_image$datapath)
     img <- tf$image$decode_jpeg(img_raw, channels = 3L)
     img <- tf$image$resize(img, size = as.integer(target_size[1:2]))
-    
+
     img
   })
-  
+
   # Processing the input image through our model, and setting up how the output probabilities are
   # shown
   # NOTE: Again, the tensor created above is used for the prediction
@@ -35,23 +41,23 @@ server <- function(input, output) {
     if (is.null(input$input_image)) {
       return(NULL)
     }
-    
+
     x <- image() %>% tf$cast(dtype = tf$float32) / 255
     x <- tf$expand_dims(x, axis = 0L)
-    
+
     output <- predict_fn(x)
     output_array <- as.array(output[[1]])
-    
+
     pred <- data.frame("Material" = label_list, "Prediction" = t(output_array))
     pred <- pred[order(pred$Prediction, decreasing = TRUE), ][1:5, ]
     pred$Prediction <- sprintf("%.2f %%", 100 * pred$Prediction)
     pred
   })
-  
+
   output$text <- renderTable({
     prediction()
   })
-  
+
   # Output that displays a warning if the highest predicted probability is under 50%
   output$warntext <- renderText({
     req(input$input_image)
@@ -60,7 +66,7 @@ server <- function(input, output) {
     }
     "⚠️ Warning: I am not confident about the material classification!"
   })
-  
+
   # The following renders the uploaded image and also deletes it immediately to avoid memory issues
   output$output_image <- renderImage(
     {

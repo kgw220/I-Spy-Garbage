@@ -1,10 +1,14 @@
+###
+# This file provides the ui relevant code for my CNN app.
+###
+
 library(shiny)
 library(shinydashboard)
 library(rsconnect)
 library(keras)
 library(tensorflow)
 library(tidyverse)
-library(fontawesome) 
+library(fontawesome)
 
 # Prevent scientific notation in the output
 options(scipen = 999)
@@ -13,7 +17,7 @@ options(scipen = 999)
 ui <- dashboardPage(
   skin = "black",
 
-  # (1) Header where we set up the title and a link to my github page
+  # Header where we set up the title and a link to my github page
   dashboardHeader(
     title = tags$div(
       style = "font-size: 20px; font-weight: bold; color: black;",
@@ -32,7 +36,7 @@ ui <- dashboardPage(
     )
   ),
 
-  # (2) Sidebar, where one uploads the image and all acceptable image formats
+  # Sidebar, where one uploads the image and all acceptable image formats
   dashboardSidebar(
     width = 300,
     tags$h4("Upload Image"),
@@ -41,7 +45,7 @@ ui <- dashboardPage(
     tags$p("Upload a clear, cropped image of the object you want to classify.")
   ),
 
-  # (3) Body
+  # Body
   dashboardBody(
     # Custom styling for background and components
     tags$head(
