@@ -83,6 +83,7 @@ generator function I defined above. I link this up to our training and validatio
 basic parameters.
 
 ```{r}
+# TODO: Set shuffle to TRUE
 train_images <- flow_images_from_directory(path_train,
   train_data_gen,
   subset = "training",
@@ -325,6 +326,9 @@ mlflow_set_experiment("cnn_sgd_hyperparameter_tuning")
 # TODO: Better hyperparameter selection algorithm
 # TODO: Rank models based on validation loss
 # TODO: Use different scoring metric instead of default accuracy
+# TODO: Different optimizer function
+# TODO: Different activation function
+# TODO: Implement batch normalization to help control weights to avoid vanishing/exploding gradients
 # Define grid of hyperparameters
 learning_rates <- c(0.01, 0.001)
 momentums <- c(0.0, 0.9)
