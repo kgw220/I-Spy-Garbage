@@ -20,30 +20,33 @@ The app itself is quite simple. Once the user uploads an image, the script sends
 
 The app link is attached here: https://kgw220.shinyapps.io/garbageclassificationapp/. Hopefully it works, but there may be issues down the line that cause the link to not work. I hopefully will fix such issues in future iterations of this project.
 
-If the app does not work (perhaps after I am finished this project due to outdated versions, I have screenshots of the app below, where I have the results of classification of some plastic grocery bags (labeled as trash since these cannot be recycled), and the classification of a random image of penguins (to demonstrate when the model cannot have over 50% probability for any given material).
+If the app does not work (perhaps after I am finished this project due to outdated versions of dependencies, I have screenshots of the app below, where I have the results of classification of a glass jar (classified as glass), and the classification of a random image of a hedgehog, to help demonstrate a popup of a lack of confidence when the majority class is not with 50% confidence. Though, given I only trained my model not on a bunch of random animals and such, you can certainly get some weird predictions if you don't upload the intended type of picture😏!
 
-<img width="778" alt="App1" src="https://github.com/user-attachments/assets/0d677070-159c-4a2d-849f-b853586a4385">
+<img width="1278" alt="Screenshot_22" src="https://github.com/user-attachments/assets/693bc11c-c727-47b7-96d2-1ebfd853164c" />
 
-<img width="841" alt="App2" src="https://github.com/user-attachments/assets/b79e98b0-79a7-409b-8fd1-24d1255d4c24">
-
+<img width="1279" alt="Screenshot_23" src="https://github.com/user-attachments/assets/5b74d4fd-6db7-49db-85cb-5a2ca56e5556" />
 
 ##  Repo Overview & Instructions For Deployment
 
 The whole script for the first part is in the format of an R notebook, and in fact, this project is completed in R, instead of the more popular option of using Python (however, I did use the python packages of keras/tensorflow in my R file). A notebook was used to make it easy to follow along with each step.
 
-Please refer to either file regarding details for how the model is built, and all the required libraries/dependencies. The raw notebook file is named `recycleModelBuilding.Rmd`, and the knitted PDF is named `I Spy Garbage_Model Building.pdf`
+Please refer to either file regarding details for how the model is built, and all the required libraries/dependencies. The raw notebook file is named `recycleModelBuilding.Rmd`.
 
-If you want to run the raw R notebook file itself, then you need to have installed R and, ideally RStudio, the main IDE for R. For the packages I call at the beginning, you will need to use the command `install.packages("PACKAGENAME")` first. For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. You also would need to follow the instructions linked here to get MLFlow to work, which relies on the python installation: https://cran.r-project.org/web/packages/mlflow/readme/README.html
+If you want to run the raw R notebook file itself, then you need to have installed R and, ideally RStudio, the main IDE for R. For the packages I call at the beginning, you will need to use the command `install.packages("PACKAGENAME")` first. 
+
+For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. You also would need to follow the instructions linked here to get MLFlow to work, which relies on the python installation: https://cran.r-project.org/web/packages/mlflow/readme/README.html
 
 Note that the images used for training the CNN were refactored to fit my preference. I added the folders used for training and testing images based on how I changed the structure from kaggle, but the file paths in the model building file need to be updated with the folders.
 
-For the second part, I do not use an R notebook file for this, and instead use a raw R script file, since this is needed to actually run the app.
+For the second part, I use a couple R scripts alongside some copied assets from the model building phase, since I wanted to put them all in a single directory for ease of access when running the app.
 
 The script for the app is in the `app.R` file, again, with all the required libraries/dependencies at the start. Again, you may need to install the packages first if you for some reason needed to run the app yourself. 
 
-## Future Work
+## Future Work/Updates
 
-At this point, I'm mostly limited by the power of my computer for future improvements (training the CNN takes a while). Though, I may come back and add my own images of miscelleous trash to improve the accuracy of this category. I documented some TODOs toward the end of my notebook regarding ideal enhancements, mainly regarding the MLOPs side of the project.
+As of 6/1/2025, this project has been updated to be a bit better. I incorperated MLFlow into the model building process to make it more rigorous than my homemade version (but still needs improvement), and improved the overall code style and syntax to be more consistent. The RShiny app has been revamped with a better UI and I finally have fixed the broken functionality after many revisions!
+
+At this point, I'm mostly limited by the power of my computer for future improvements (training the CNN takes a while). In particular, even after fine tuning, the model still suffers from being able to correctly classify miscelleous trash. Though, I may come back and add my own images of miscelleous trash to improve the accuracy of this category, among other things. I documented some TODOs toward the end of my notebook regarding ideal enhancements, mainly regarding the MLOPs side of the project.
 
 ## License
 

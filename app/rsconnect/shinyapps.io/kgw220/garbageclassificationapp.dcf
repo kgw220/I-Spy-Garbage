@@ -5,6 +5,6 @@ account: kgw220
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12422350
-bundleId: 8968284
+bundleId: 10378918
 url: https://kgw220.shinyapps.io/garbageclassificationapp/
 version: 1
