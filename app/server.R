@@ -51,6 +51,7 @@ server <- function(input, output) {
     pred <- data.frame("Material" = label_list, "Prediction" = t(output_array))
     pred <- pred[order(pred$Prediction, decreasing = TRUE), ][1:5, ]
     pred$Prediction <- sprintf("%.2f %%", 100 * pred$Prediction)
+    
     pred
   })
 
