@@ -13,43 +13,45 @@ target_size <- c(224, 224, 3)
 
 # Create a server object, which contains all the relevant code for the interactivity of the
 # dashboard
+# NOTE: I use an approach to directly use TensorFlow instead of using the built in image_load()
+# function from keras in an effort to avoid several issues which I had to deal with when debugging.
+
 server <- function(input, output) {
   # Setup the image input
   image <- reactive({
-    keras::image_load(
-      path = input$input_image$datapath,
-      target_size = target_size[1:2]
-    )
+    req(input$input_image)
+    
+    img_raw <- tf$io$read_file(input$input_image$datapath)
+    img <- tf$image$decode_jpeg(img_raw, channels = 3L)
+    img <- tf$image$resize(img, size = as.integer(target_size[1:2]))
+    
+    img
   })
-
+  
   # Processing the input image through our model, and setting up how the output probabilities are
   # shown
+  # NOTE: Again, the tensor created above is used for the prediction
   prediction <- reactive({
     if (is.null(input$input_image)) {
       return(NULL)
     }
-    x <- image_to_array(image())
-    x <- array_reshape(x, c(1, dim(x)))
-    x <- x / 255
     
-    # Convert input to tensor and run through the model's predict function
-    input_tensor <- tf$convert_to_tensor(x, dtype = tf$float32)
-    output <- predict_fn(input_tensor)
+    x <- image() %>% tf$cast(dtype = tf$float32) / 255
+    x <- tf$expand_dims(x, axis = 0L)
     
-    # Extract prediction values from the output
-    output_array <- as.array(output[[1]])  # You can inspect names(output) if this fails
+    output <- predict_fn(x)
+    output_array <- as.array(output[[1]])
     
-    # Format predictions into a table
     pred <- data.frame("Material" = label_list, "Prediction" = t(output_array))
     pred <- pred[order(pred$Prediction, decreasing = TRUE), ][1:5, ]
     pred$Prediction <- sprintf("%.2f %%", 100 * pred$Prediction)
     pred
   })
-
+  
   output$text <- renderTable({
     prediction()
   })
-
+  
   # Output that displays a warning if the highest predicted probability is under 50%
   output$warntext <- renderText({
     req(input$input_image)
@@ -58,7 +60,7 @@ server <- function(input, output) {
     }
     "⚠️ Warning: I am not confident about the material classification!"
   })
-
+  
   # The following renders the uploaded image and also deletes it immediately to avoid memory issues
   output$output_image <- renderImage(
     {
