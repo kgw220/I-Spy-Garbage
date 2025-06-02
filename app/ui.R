@@ -4,10 +4,6 @@
 
 library(shiny)
 library(shinydashboard)
-library(rsconnect)
-library(keras)
-library(tensorflow)
-library(tidyverse)
 library(fontawesome)
 
 # Prevent scientific notation in the output
