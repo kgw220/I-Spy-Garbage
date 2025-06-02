@@ -326,8 +326,7 @@ mlflow_set_experiment("cnn_sgd_hyperparameter_tuning")
 # TODO: Better hyperparameter selection algorithm
 # TODO: Rank models based on validation loss
 # TODO: Use different scoring metric instead of default accuracy
-# TODO: Different optimizer function
-# TODO: Different activation function
+# TODO: Different optimizer/activation/scoring functions
 # TODO: Implement batch normalization to help control weights to avoid vanishing/exploding gradients
 # Define grid of hyperparameters
 learning_rates <- c(0.01, 0.001)
