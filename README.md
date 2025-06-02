@@ -46,7 +46,7 @@ The script for the app is in the `app.R` file, again, with all the required libr
 
 As of 6/1/2025, this project has been updated to be a bit better. I incorperated MLFlow into the model building process to make it more rigorous than my homemade version (but still needs improvement), and improved the overall code style and syntax to be more consistent. The RShiny app has been revamped with a better UI and I finally have fixed the broken functionality after many revisions!
 
-At this point, I'm mostly limited by the power of my computer for future improvements (training the CNN takes a while). In particular, even after fine tuning, the model still suffers from being able to correctly classify miscelleous trash. Though, I may come back and add my own images of miscelleous trash to improve the accuracy of this category, among other things. I documented some TODOs toward the end of my notebook regarding ideal enhancements, mainly regarding the MLOPs side of the project.
+At this point, I'm mostly limited by the power of my computer for future improvements (training the CNN takes a while). In particular, even after fine tuning, the model still suffers from being able to correctly classify miscelleous trash. Though, I may come back and add my own images of miscelleous trash to improve the accuracy of this category, among other things. I documented some TODOs toward the end of my notebook regarding ideal enhancements, mainly regarding the MLOPs side of the project. Though, I will admit, I probably will not return to this project for a while.
 
 ## License
 
