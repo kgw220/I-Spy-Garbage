@@ -30,17 +30,19 @@ If the app does not work (perhaps after I am finished this project due to outdat
 
 The whole script for the first part is in the format of an R notebook, and in fact, this project is completed in R, instead of the more popular option of using Python (however, I did use the python packages of keras/tensorflow in my R file). A notebook was used to make it easy to follow along with each step.
 
-Please refer to either file regarding details for how the model is built, and all the required libraries/dependencies. The raw notebook file is named `recycleModelBuilding.Rmd`.
+Please refer to either file regarding details for how the model is built, and all the required libraries/dependencies. Related files are in the `model` directory, and the raw notebook file is named `recycleModelBuilding.Rmd`.
 
 If you want to run the raw R notebook file itself, then you need to have installed R and, ideally RStudio, the main IDE for R. For the packages I call at the beginning, you will need to use the command `install.packages("PACKAGENAME")` first. 
 
 For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. You also would need to follow the instructions linked here to get MLFlow to work, which relies on the python installation: https://cran.r-project.org/web/packages/mlflow/readme/README.html
 
-Note that the images used for training the CNN were refactored to fit my preference. I added the folders used for training and testing images based on how I changed the structure from kaggle, but the file paths in the model building file need to be updated with the folders.
+Note that the images used for training the CNN were refactored to fit my preference. I added the folders used for training and testing images based on how I changed the structure from kaggle.
 
-For the second part, I use a couple R scripts alongside some copied assets from the model building phase, since I wanted to put them all in a single directory for ease of access when running the app.
+For the second part, all files are in the `app` directory. I use a couple R scripts alongside some copied assets from the model building phase, since I wanted to put them all in a single directory for ease of access when running the app.
 
-The script for the app is in the `app.R` file, again, with all the required libraries/dependencies at the start. Again, you may need to install the packages first if you for some reason needed to run the app yourself. 
+The scripts for the app are in the `ui.R` file and `server.R` file (split up since this is how shiny apps are to be setup). Again, you may need to install the packages first if you wanted to run the app yourself. 
+
+Reference the `requirements.txt` file to see the versions of all the major dependencies used in this project. Something may not work in updated versions (e.g. a function becoming legacy), and overall some things are very finniky - These are the versions that ended up working for me in the end.
 
 ## Future Work/Updates
 
