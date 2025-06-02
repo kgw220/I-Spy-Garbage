@@ -34,7 +34,7 @@ Please refer to either file regarding details for how the model is built, and al
 
 If you want to run the raw R notebook file itself, then you need to have installed R and, ideally RStudio, the main IDE for R. For the packages I call at the beginning, you will need to use the command `install.packages("PACKAGENAME")` first. 
 
-For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. You also would need to follow the instructions linked here to get MLFlow to work, which relies on the python installation: https://cran.r-project.org/web/packages/mlflow/readme/README.html
+For properly getting keras and tensorflow to run, following the instructions linked here: https://tensorflow.rstudio.com/install/. You also would need to follow the instructions linked here to get MLFlow to work, which relies on the python installation: https://cran.r-project.org/web/packages/mlflow/readme/README.html. MLFlow will need to start a local server, which you can do with the command prompt; The associated command is commented once MLFlow is called in my project.
 
 Note that the images used for training the CNN were refactored to fit my preference. I added the folders used for training and testing images based on how I changed the structure from kaggle.
 
