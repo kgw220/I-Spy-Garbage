@@ -5,12 +5,9 @@
 ###
 
 library(shiny)
-library(shinydashboard)
 library(rsconnect)
-library(keras)
 library(tensorflow)
-library(tidyverse)
-library(fontawesome)
+
 
 model <- tf$saved_model$load("final_CNN_model")
 predict_fn <- model$signatures[["serving_default"]]
